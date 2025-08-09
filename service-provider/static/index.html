@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>EM956 Community Service Provider</title>
+        <link rel="stylesheet" type="text/css" href="less/style.css"/>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Go Backend + Frontend Example</h1>
+            
+            <div class="status" id="status"></div>
+            
+            <button onclick="fetchUsers()">Load Users</button>
+            <button onclick="checkHealth()">Check API Health</button>
+            
+            <h2>Add New User</h2>
+            <div>
+                <input type="text" id="userName" placeholder="Name" />
+                <input type="email" id="userEmail" placeholder="Email" />
+                <button onclick="addUser()">Add User</button>
+            </div>
+            
+            <h2>Users</h2>
+            <div id="users"></div>
+        </div>
+
+        <script>
+            const API_BASE = '/api';
+            
+            function showStatus(message, isError = false) {
+                const status = document.getElementById('status');
+                status.textContent = message;
+                status.className = `status ${isError ? 'error' : 'success'}`;
+                setTimeout(() => status.textContent = '', 3000);
+            }
+            
+            async function fetchUsers() {
+                try {
+                    const response = await fetch(`${API_BASE}/users`);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    const users = await response.json();
+                    const usersDiv = document.getElementById('users');
+                    
+                    if (users.length === 0) {
+                        usersDiv.innerHTML = '<p>No users found</p>';
+                        return;
+                    }
+                    
+                    usersDiv.innerHTML = users.map(user => `
+                        <div class="user">
+                            <strong>${user.name}</strong><br>
+                            Email: ${user.email}<br>
+                            ID: ${user.id}
+                        </div>
+                    `).join('');
+                    
+                    showStatus(`Loaded ${users.length} users`);
+                } catch (error) {
+                    showStatus(`Error loading users: ${error.message}`, true);
+                    console.error('Error:', error);
+                }
+            }
+            
+            async function addUser() {
+                const name = document.getElementById('userName').value.trim();
+                const email = document.getElementById('userEmail').value.trim();
+                
+                if (!name || !email) {
+                    showStatus('Please fill in both name and email', true);
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`${API_BASE}/users`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name, email })
+                    });
+                    
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    const newUser = await response.json();
+                    showStatus(`User ${newUser.name} added successfully!`);
+                    
+                    // Clear form
+                    document.getElementById('userName').value = '';
+                    document.getElementById('userEmail').value = '';
+                    
+                    // Refresh users list
+                    fetchUsers();
+                } catch (error) {
+                    showStatus(`Error adding user: ${error.message}`, true);
+                    console.error('Error:', error);
+                }
+            }
+            
+            async function checkHealth() {
+                try {
+                    const response = await fetch(`${API_BASE}/health`);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    const health = await response.json();
+                    showStatus(`API is ${health.status} - ${new Date(health.time).toLocaleString()}`);
+                } catch (error) {
+                    showStatus(`Health check failed: ${error.message}`, true);
+                    console.error('Error:', error);
+                }
+            }
+            
+            // Load users when page loads
+            window.addEventListener('load', fetchUsers);
+        </script>
+    </body>
+</html>
