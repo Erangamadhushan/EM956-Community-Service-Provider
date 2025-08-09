@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>EM956 Community Service Provider</title>
+        <link rel="stylesheet" type="text/css" href="less/style.css"/>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Go Backend + Frontend Example</h1>
+            
+            <div class="status" id="status"></div>
+            
+            <button onclick="fetchUsers()">Load Users</button>
+            <button onclick="checkHealth()">Check API Health</button>
+            
+            <h2>Add New User</h2>
+            <div>
+                <input type="text" id="userName" placeholder="Name" />
+                <input type="email" id="userEmail" placeholder="Email" />
+                <button onclick="addUser()">Add User</button>
+            </div>
+            
+            <h2>Users</h2>
+            <div id="users"></div>
+        </div>
+        <script src="scripts/controller.js"></script>
+        
+    </body>
+</html>
