@@ -89,18 +89,19 @@ function fetchUsers() {
 function addUser() {
     return __awaiter(this, void 0, void 0, function () {
         var nameInput, emailInput, response, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _a, _b, _c, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
-                    nameInput = document.getElementById('userName').value.trim();
-                    emailInput = document.getElementById('userEmail').value.trim();
+                    nameInput = (_b = (_a = document.getElementById('userName')) === null || _a === void 0 ? void 0 : _a.value) === null || _b === void 0 ? void 0 : _b.trim();
+                    emailInput = (_d = (_c = document.getElementById('userEmail')) === null || _c === void 0 ? void 0 : _c.value) === null || _d === void 0 ? void 0 : _d.trim();
                     if (!nameInput || !emailInput) {
                         showState("Please provide both name and email.", true);
                         return [2 /*return*/];
                     }
-                    _a.label = 1;
+                    _e.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _e.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, fetch("".concat(API_BASE_URL, "users"), {
                             method: "POST",
                             headers: {
@@ -109,7 +110,7 @@ function addUser() {
                             body: JSON.stringify({ name: nameInput, email: emailInput })
                         })];
                 case 2:
-                    response = _a.sent();
+                    response = _e.sent();
                     if (!response.ok) {
                         throw new Error("HTTP error! status: ".concat(response.status));
                     }
@@ -117,7 +118,7 @@ function addUser() {
                     fetchUsers(); // Refresh the user list
                     return [3 /*break*/, 4];
                 case 3:
-                    error_2 = _a.sent();
+                    error_2 = _e.sent();
                     console.error("Error adding user:", error_2);
                     showState("Failed to add user", true);
                     return [3 /*break*/, 4];

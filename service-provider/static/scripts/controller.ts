@@ -2,7 +2,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("fetchUsersBtn")?.addEventListener("click", fetchUsers);
     document.getElementById("addUserBtn")?.addEventListener("click", addUser);
-    document.getElementById("checkHealthBtn")?.addEventListener("click", checkHelth);
+    document.getElementById("checkHealthBtn")?.addEventListener("click", checkHealth);
 
     // Initial fetch of users
     fetchUsers();
@@ -48,9 +48,9 @@ async function fetchUsers(): Promise<void> {
     }
 }
 
-async function addUser(): void {
-    const nameInput: HTMLInputElement | string = document.getElementById('userName').value.trim();
-    const emailInput: HTMLInputElement | string = document.getElementById('userEmail').value.trim();
+async function addUser(): Promise<void> {
+    const nameInput: string | null = (document.getElementById('userName') as HTMLInputElement)?.value?.trim();
+    const emailInput: string | null = (document.getElementById('userEmail') as HTMLInputElement)?.value?.trim();
 
     if (!nameInput || !emailInput) {
         showState("Please provide both name and email.", true);
@@ -78,7 +78,7 @@ async function addUser(): void {
     }
 }
 
-async function checkHelth(): Promise<void> {
+async function checkHealth(): Promise<void> {
     try {
         const response = await fetch(`${API_BASE_URL}health`);
         if (!response.ok) {
